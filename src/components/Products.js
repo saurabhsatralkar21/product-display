@@ -4,7 +4,7 @@ const Products = () => {
 
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]); // Never set the state to String. Always set to Array
-  //  const [page, setPage] = useState(1);
+    const [page, setPage] = useState(1);
 
 
     // Following useEffect is used for Products API call
@@ -17,14 +17,26 @@ const Products = () => {
       try {
        const response = await fetch(productsApiUrl);
        const jsonFormatProducts = await response.json();
-       setProducts(jsonFormatProducts);
+       setProducts(prev => [...prev, ...jsonFormatProducts]);
        setLoading(false);
       } catch(error) {
         console.log(error);
       }
     }
     fetchData();
-  },[]);
+  },[page]);
+
+  const handleScroll = () => {
+    if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+      setPage(prev => prev + 1)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [])
+
 
     return(
         <div>
@@ -38,7 +50,7 @@ const Products = () => {
                         <div className='card-discription'>
                             <p className='productTitle'> {product.title} </p>
                             <p className='productPrice'> {`Price: $${product.price}`} </p>
-                            <p className='productCategory'> {`Category: ${product.category.name}`} </p>
+                            <p className='productCategory'> {`Category: ${product.category}`} </p>
                             <p className='productDescription'> {product.description} </p>
                         </div>
                 </div>
