@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Products = () => {
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]); // Never set the state to String. Always set to Array
     const [page, setPage] = useState(1);
 
